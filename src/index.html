@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>目录构思器（HTML/CSS/JS 分离版）</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  
+
+  <div class="wrap">
+    <section class="card">
+      <div class="head">
+        <div>
+          <div class="title">目录构思器</div>
+          <div class="subtitle">
+            每个章节可维护多个候选标题；展示时通过下拉仅选择其中一个。<br/>
+            拖拽：抓住“⠿”把章节拖动排序；也可以拖到上一级节点上，移动到它的子目录里。
+          </div>
+        </div>
+        <div class="btns">
+          <button class="btn-primary" id="btnAddRoot">+ 一级</button>
+          <button id="btnImport" title="从 JSON 导入">导入</button>
+          <button id="btnExport" title="导出为 JSON">导出</button>
+          <button id="btnReset" title="清空并重置">重置</button>
+        </div>
+      </div>
+
+      <div class="root-drop" id="rootDrop" aria-hidden="true">
+        释放：移动为根目录（仅一级章节）
+      </div>
+
+      <div class="tree" id="tree"></div>
+
+      <div class="footnote">数据会自动保存在浏览器本地（localStorage）。</div>
+    </section>
+
+    <section class="card">
+      <div class="head">
+        <div>
+          <div class="title">效果预览</div>
+          <div class="subtitle">按当前选择实时渲染目录效果（这里不展示 Markdown）。</div>
+        </div>
+        <div class="btns">
+          <button id="btnCopy">复制 Markdown</button>
+        </div>
+      </div>
+
+      <div id="preview" class="preview" aria-label="目录效果预览"></div>
+
+      <div class="footnote">点击“复制 Markdown”才会生成并弹出 Markdown 文本。</div>
+    </section>
+  </div>
+
+  <!-- 候选标题管理 -->
+  <dialog id="dlg">
+    <div class="dlg-head">
+      <div>
+        <div class="dlg-title" id="dlgTitle">管理候选标题</div>
+        <div class="dlg-sub" id="dlgSub">—</div>
+      </div>
+      <button id="btnClose">关闭</button>
+    </div>
+    <div class="dlg-body">
+      <div class="opt-list" id="optList"></div>
+
+      <div class="add-opt">
+        <input id="newOpt" type="text" placeholder="输入新候选，比如：『故事的引爆点』" />
+        <button class="btn-primary" id="btnAddOpt">添加</button>
+      </div>
+      <div class="dlg-tip">至少保留 1 个候选标题。</div>
+    </div>
+  </dialog>
+
+  <!-- Markdown 弹窗（点击复制时才出现） -->
+  <dialog id="mdDlg">
+    <div class="dlg-head">
+      <div>
+        <div class="dlg-title">Markdown</div>
+        <div class="dlg-sub">已按当前选择生成。你也可以在这里手动复制。</div>
+      </div>
+      <button id="btnMdClose">关闭</button>
+    </div>
+    <div class="dlg-body">
+      <textarea id="mdText" class="md-text" readonly></textarea>
+      <div class="md-actions">
+        <button id="btnMdCopy" class="btn-primary">再复制一次</button>
+      </div>
+    </div>
+  </dialog>
+
+
+  <!-- 数据导入/导出 -->
+  <dialog id="dataDlg">
+    <div class="dlg-head">
+      <div>
+        <div class="dlg-title">数据导入 / 导出</div>
+        <div class="dlg-sub">用于迁移、备份、分享。支持 JSON 文件或粘贴文本。</div>
+      </div>
+      <button id="btnDataClose">关闭</button>
+    </div>
+    <div class="dlg-body">
+      <div class="tabs" role="tablist" aria-label="导入导出切换">
+        <button class="tab active" id="tabExport" data-tab="export" type="button">导出</button>
+        <button class="tab" id="tabImport" data-tab="import" type="button">导入</button>
+      </div>
+
+      <div class="panel" id="panelExport" role="tabpanel" aria-labelledby="tabExport">
+        <textarea id="jsonText" class="data-text" readonly></textarea>
+        <div class="md-actions">
+          <button id="btnJsonCopy" class="btn-primary" type="button">复制 JSON</button>
+          <button id="btnJsonDownload" type="button">下载 .json</button>
+        </div>
+      </div>
+
+      <div class="panel hidden" id="panelImport" role="tabpanel" aria-labelledby="tabImport">
+        <div class="import-row">
+          <input id="jsonFile" class="file" type="file" accept="application/json,.json" />
+          <button id="btnUseFile" type="button">读取文件到文本框</button>
+        </div>
+
+        <textarea id="jsonImportText" class="data-text" placeholder="把 JSON 粘贴到这里…"></textarea>
+        <div class="md-actions">
+          <button id="btnApplyImport" class="btn-primary" type="button">应用导入</button>
+        </div>
+        <div id="importMsg" class="msg" role="status" aria-live="polite"></div>
+        <div class="dlg-tip">提示：导入会覆盖当前目录。建议先“导出”做备份。</div>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast">已复制</div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
