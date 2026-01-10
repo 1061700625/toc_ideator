@@ -1,5 +1,6 @@
 // ------------------ 状态与工具 ------------------
 const STORAGE_KEY = "toc_ideator_split_v1";
+const PREVIEW_NUM_KEY = "toc_preview_numbers_v1";
 
 function uid(){
   if (crypto && crypto.randomUUID) return crypto.randomUUID();
@@ -41,23 +42,37 @@ function toMarkdown(nodes){
   return lines.join("\n");
 }
 
-function toPreviewHTML(nodes){
+function toPreviewHTML(nodes, withNumbers = true){
   if (!nodes || !nodes.length){
     return `<div class="pv-empty">（暂无内容）</div>`;
   }
+
   const parts = [];
+  const counters = [0, 0, 0]; // Lv1/Lv2/Lv3
+
   const walk = (arr) => {
-    for (const n of arr){
-      const title = escapeHtml(nodeTitle(n));
-      const indent = (n.level - 1) * 16;
+    for (const raw of arr){
+      const lvl = clamp(Number(raw.level) || 1, 1, 3);
+      // 计数：本级 +1，低级清零
+      counters[lvl - 1] += 1;
+      for (let i = lvl; i < 3; i++) counters[i] = 0;
+
+      const num = counters.slice(0, lvl).join(".");
+      const indent = (lvl - 1) * 16;
+
+      const numHtml = withNumbers ? `<span class="pv-num">${num}</span>` : "";
+      const titleHtml = `<span class="pv-title">${escapeHtml(nodeTitle(raw))}</span>`;
+
       parts.push(
-        `<div class="pv-row pv-l${n.level}" style="margin-left:${indent}px">` +
-          `${title} <span class="pv-meta">Lv${n.level}</span>` +
+        `<div class="pv-row pv-l${lvl}" style="margin-left:${indent}px">` +
+          `${numHtml} ${titleHtml}` +
         `</div>`
       );
-      if (n.children?.length) walk(n.children);
+
+      if (raw.children?.length) walk(raw.children);
     }
   };
+
   walk(nodes);
   return parts.join("");
 }
@@ -171,6 +186,12 @@ let tree = (() => {
   return raw ? safeParse(raw, [makeNode(1)]) : [makeNode(1)];
 })();
 
+let showPreviewNumbers = (() => {
+  const v = localStorage.getItem(PREVIEW_NUM_KEY);
+  if (v === null) return true;     // 默认开启
+  return v === "1";
+})();
+
 function save(){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(tree));
 }
@@ -206,13 +227,24 @@ let dragId = null;
 let dragLevel = null;
 let lastHoverRow = null;
 
+const elChkNumbers = document.getElementById("chkNumbers");
+if (elChkNumbers){
+  elChkNumbers.checked = showPreviewNumbers;
+  elChkNumbers.onchange = () => {
+    showPreviewNumbers = elChkNumbers.checked;
+    localStorage.setItem(PREVIEW_NUM_KEY, showPreviewNumbers ? "1" : "0");
+    render();
+  };
+}
+
+
 // ------------------ 渲染 ------------------
 function render(){
   elTree.innerHTML = "";
   for (const n of tree){
     elTree.appendChild(renderNode(n, 0, null));
   }
-  elPreview.innerHTML = toPreviewHTML(tree);
+  elPreview.innerHTML = toPreviewHTML(tree, showPreviewNumbers);
 }
 
 function renderNode(node, depth, parentId){

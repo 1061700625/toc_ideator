@@ -186,19 +186,97 @@ select:focus, input:focus, textarea:focus{
   background:#fff;
   border:1px solid rgba(230,230,239,.9);
 }
+.pv-num{
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+  color: var(--muted);
+  font-weight: 600;
+  min-width: 4.5em;
+  text-align: right;
+  white-space: nowrap;
+}
+.pv-title{
+  flex: 1;
+  min-width: 0;
+}
 .pv-l1{ font-size:18px; font-weight:800; }
 .pv-l2{ font-size:15px; font-weight:700; }
 .pv-l3{ font-size:13px; font-weight:600; }
-.pv-meta{
-  margin-left:10px;
-  font-size:12px;
-  color:var(--muted);
-  font-weight:500;
-}
 .pv-empty{
   color:var(--muted);
   font-size:13px;
   padding:8px 10px;
+}
+
+/* 美化“编号”勾选：Toggle 开关 */
+.toggle{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  cursor:pointer;
+  user-select:none;
+  padding:6px 10px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:#fff;
+  transition:.15s;
+}
+.toggle:hover{
+  background:#f3f4f6;
+}
+.toggle input{
+  position:absolute;
+  opacity:0;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+}
+.toggle-track{
+  width:40px;
+  height:22px;
+  border-radius:999px;
+  background:#e5e7eb;
+  border:1px solid rgba(17,24,39,.12);
+  position:relative;
+  transition:.15s;
+  flex:0 0 auto;
+}
+.toggle-thumb{
+  width:18px;
+  height:18px;
+  border-radius:999px;
+  background:#fff;
+  box-shadow: 0 2px 8px rgba(16,24,40,.12);
+  position:absolute;
+  top:50%;
+  left:2px;
+  transform:translateY(-50%);
+  transition:.15s;
+}
+.toggle-text{
+  font-size:13px;
+  color:var(--text);
+}
+/* 选中态 */
+.toggle input:checked + .toggle-track{
+  background:#111827;
+  border-color:#111827;
+}
+.toggle input:checked + .toggle-track .toggle-thumb{
+  left:20px;
+}
+/* 键盘可访问（Tab 聚焦） */
+.toggle input:focus-visible + .toggle-track{
+  box-shadow: 0 0 0 3px rgba(17,24,39,.12);
+}
+/* 禁用态（如果你未来会用到） */
+.toggle input:disabled + .toggle-track{
+  opacity:.5;
+}
+.toggle input:disabled ~ .toggle-text{
+  opacity:.6;
+}
+.toggle input:disabled ~ *{
+  cursor:not-allowed;
 }
 
 /* dialog */
