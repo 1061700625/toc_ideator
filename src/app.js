@@ -256,6 +256,16 @@ function renderNode(node, depth, parentId){
   row.dataset.id = node.id;
   row.dataset.level = String(node.level);
   row.dataset.parent = parentId ?? "";
+  // 双击行：快速编辑当前显示的标题（打开“候选”弹窗并定位到当前选中项）
+  row.title = "双击编辑当前标题";
+  row.addEventListener("dblclick", (e) => {
+    const t = e.target;
+    // 双击在按钮/下拉/输入框等控件上时不触发（避免误触）
+    if (t && (t.closest("button") || t.closest("select") || t.closest("input") || t.closest("textarea") || t.closest("a"))) return;
+    openOptionDialog(node.id, "selected");
+  });
+
+
 
   // 折叠按钮
   const btnCollapse = document.createElement("button");
@@ -323,7 +333,7 @@ function renderNode(node, depth, parentId){
   const btnOptions = document.createElement("button");
   btnOptions.textContent = "候选";
   btnOptions.title = "管理候选标题";
-  btnOptions.onclick = () => openOptionDialog(node.id);
+  btnOptions.onclick = () => openOptionDialog(node.id, "new");
 
   // 新增同级
   const btnAddSibling = document.createElement("button");
@@ -528,7 +538,7 @@ elTree.addEventListener("drop", (e) => {
 });
 
 // ------------------ 候选标题弹窗 ------------------
-function openOptionDialog(nodeId){
+function openOptionDialog(nodeId, focusMode = "new"){
   editingId = nodeId;
   const ctx = getContext(tree, nodeId);
   if (!ctx) return;
@@ -542,7 +552,16 @@ function openOptionDialog(nodeId){
   if (typeof dlg.showModal === "function") dlg.showModal();
   else alert("你的浏览器不支持 <dialog>，请换 Chrome/Edge/Firefox。");
 
-  setTimeout(()=>newOpt.focus(), 60);
+  setTimeout(() => {
+    const c = getContext(tree, editingId);
+    if (!c) return newOpt?.focus();
+    if (focusMode === "selected") {
+      const idx = Number.isFinite(c.node.selected) ? c.node.selected : 0;
+      const input = optList?.querySelector(`input[type="text"][data-idx="${idx}"]`);
+      if (input) { input.focus(); input.select(); return; }
+    }
+    newOpt?.focus();
+  }, 60);
 }
 
 function renderOptionList(){
@@ -588,6 +607,7 @@ function renderOptionList(){
       save(); render();
       dlgSub.textContent = `已选：${nodeTitle(c.node)} · 候选数：${c.node.options?.length || 0}`;
     };
+    input.dataset.idx = String(idx);
 
     const del = document.createElement("button");
     del.className = "btn-danger";
