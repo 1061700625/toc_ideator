@@ -16,15 +16,28 @@
 
 *{ box-sizing:border-box; }
 
+html, body{
+  height: 100%;
+}
 body{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   margin:0;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
     "PingFang SC","Noto Sans CJK SC","Microsoft YaHei", Arial, sans-serif;
   background:var(--bg);
   color:var(--text);
 }
-
+.site-footer{
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 0 18px;
+}
 .wrap{
+  flex: 1;
   max-width: 1680px;          /* 原来 1200px，改大 */
   margin: 0 auto;
   padding: 16px 20px;         /* 左右稍微加一点，但整体更宽 */
