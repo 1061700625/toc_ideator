@@ -1,6 +1,8 @@
 # 文章目录构思器（TOC Ideator）
 
-<img width="1869" height="851" alt="image" src="https://github.com/user-attachments/assets/38a5daed-85a8-4143-afec-45144c9c772b" />
+
+<img width="1280" height="460" alt="image" src="https://github.com/user-attachments/assets/3d661f9f-76e0-4e70-9588-9e205f06632b" />
+
 
 一个轻量的「目录构思器」：用目录树组织章节层级，并为每个章节维护多个候选标题，适合头脑风暴与快速成稿。
 
