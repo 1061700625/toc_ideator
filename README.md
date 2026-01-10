@@ -13,7 +13,8 @@
 - ✅ 右侧效果预览（实时渲染）
 - ✅ 一键复制 Markdown（点击按钮才生成，并弹出 Markdown 文本）
 - ✅ 导入 / 导出（JSON 备份、迁移、分享）
-- ✅ 自动本地保存（localStorage）
+- ✅ 自动本地保存（localStorage）  
+- ✅ 在线分享功能  
 
 > 在线体验：https://www.xfxuezhang.cn/web/toc/
 
@@ -51,6 +52,8 @@ python -m http.server 5500
 # Node.js
 npx serve .
 ```
+
+> 如果要使用**在线分享**功能，就得用php或apache等方式启动了
 
 ---
 
