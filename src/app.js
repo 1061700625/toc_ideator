@@ -733,6 +733,39 @@ document.getElementById("btnJsonCopy")?.addEventListener("click", async () => {
   }
 });
 
+document.getElementById("btnShare")?.addEventListener("click", async () => {
+  const payload = buildExportPayload(); // 你已有:contentReference[oaicite:6]{index=6}
+  try{
+    toast("生成中…");
+    const res = await fetch("./save.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const out = await res.json().catch(() => null);
+    if (!res.ok || !out?.ok || !out?.url) {
+      throw new Error(out?.msg || ("HTTP " + res.status));
+    }
+
+    const link = new URL(out.url, location.href).toString();
+
+    try {
+      await navigator.clipboard.writeText(link);
+      toast("分享链接已复制");
+      // 也可以顺便弹一下，方便看见
+      window.prompt("分享链接（已复制）：", link);
+    } catch (_) {
+      window.prompt("分享链接：", link);
+      toast("复制受限，已弹出链接");
+    }
+  } catch (e) {
+    console.error(e);
+    toast("分享失败");
+    alert("分享失败：" + (e?.message || e));
+  }
+});
+
+
 document.getElementById("btnJsonDownload")?.addEventListener("click", () => {
   const text = exportJSONString();
   if (jsonText) jsonText.value = text;
