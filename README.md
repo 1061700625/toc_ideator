@@ -15,6 +15,8 @@
 - ✅ 导入 / 导出（JSON 备份、迁移、分享）
 - ✅ 自动本地保存（localStorage）
 
+> 在线体验：https://www.xfxuezhang.cn/web/toc/
+
 ---
 
 ## 目录结构
