@@ -7,11 +7,47 @@
   --shadow: 0 6px 20px rgba(16,24,40,.08);
   --radius:16px;
 
+  /* surfaces */
+  --surface:#fff;
+  --surface2:#fafafa;
+  --surface3:#f3f4f6;
+  --hover:#e6e6e6;
+
+  /* primary */
+  --primaryBg:#111827;
+  --primaryText:#fff;
+  --primaryBgHover:#0b1220;
+
   --dragLine:#111827;
   --dragBg:#eef2ff;
   --danger:#b42318;
   --dangerBorder:#f1c4c0;
   --dangerBg:#fff1f1;
+}
+
+/* 深色主题：给 <body> 加 class="theme-dark" 即可 */
+body.theme-dark{
+  --bg:#0b1020;
+  --card:#0f172a;
+  --border:rgba(148,163,184,.22);
+  --text:#e5e7eb;
+  --muted:#94a3b8;
+  --shadow: 0 10px 30px rgba(0,0,0,.45);
+
+  --surface:#111c33;
+  --surface2:#0b1427;
+  --surface3:#162544;
+  --hover:#1e2a44;
+
+  --primaryBg:#e5e7eb;
+  --primaryText:#0b1020;
+  --primaryBgHover:#cbd5e1;
+
+  --dragLine:#e5e7eb;
+  --dragBg:#1f2a48;
+  --danger:#f87171;
+  --dangerBorder:rgba(248,113,113,.35);
+  --dangerBg:rgba(248,113,113,.10);
 }
 
 *{ box-sizing:border-box; }
@@ -82,25 +118,26 @@ body{
 
 button{
   border:1px solid var(--border);
-  background:#fff;
+  background:var(--surface);
   padding:6px 8px;      /* 原来 8px 10px */
   border-radius:5px;   /* 原来 12px */
   font-size:13px;
   cursor:pointer;
   transition:.15s;
+  color: var(--text);
 }
-button:hover{ background:#f3f4f6; }
+button:hover{ background:var(--surface3); }
 button:disabled{ opacity:.5; cursor:not-allowed; }
 
 .btn-primary{
-  background:#111827;
-  color:#fff;
-  border-color:#111827;
+  background:var(--primaryBg);
+  color:var(--primaryText);
+  border-color:var(--primaryBg);
 }
-.btn-primary:hover{ background:#0b1220; }
+.btn-primary:hover{ background:var(--primaryBgHover); }
 
 .btn-danger{
-  background:#fff;
+  background:var(--surface);
   color:var(--danger);
   border-color:var(--dangerBorder);
 }
@@ -123,7 +160,7 @@ button:disabled{ opacity:.5; cursor:not-allowed; }
   position:relative;
 }
 .row[data-level="1"]{
-  background:#fff;
+  background:var(--surface);
   border-color:var(--border);
 }
 .row[data-level="2"],
@@ -133,7 +170,7 @@ button:disabled{ opacity:.5; cursor:not-allowed; }
   padding-left:6px;
 }
 .row:hover{
-  background:#e6e6e6;
+  background:var(--hover);
   border-color:rgba(230,230,239,.9);
 }
 
@@ -163,9 +200,9 @@ button:disabled{ opacity:.5; cursor:not-allowed; }
   cursor:grab;
   user-select:none;
   border:1px solid var(--border);
-  background:#fff;
+  background:var(--surface);
 }
-.drag-handle:hover{ background:#f3f4f6; }
+.drag-handle:hover{ background:var(--surface3); }
 .drag-handle:active{ cursor:grabbing; }
 
 select{
@@ -174,9 +211,16 @@ select{
   border:1px solid var(--border);
   border-radius:5px;
   padding:6px 8px;
-  background:#fff;
+  background:var(--surface);
+  color:var(--text);
   outline:none;
 }
+/* 一些浏览器会单独渲染下拉选项，显式设置可读性 */
+select option{
+  background:var(--surface);
+  color:var(--text);
+}
+
 select:focus, input:focus, textarea:focus{
   box-shadow: 0 0 0 3px rgba(17,24,39,.12);
   border-color:#cfd3dc;
@@ -188,7 +232,7 @@ select:focus, input:focus, textarea:focus{
   border:1px solid var(--border);
   border-radius:14px;
   padding:12px;
-  background:#fafafa;
+  background:var(--surface2);
   overflow: visible;
   max-height: none;
 }
@@ -196,12 +240,12 @@ select:focus, input:focus, textarea:focus{
   border-radius:12px;
   padding:8px 10px;
   margin:6px 0;
-  background:#fff;
+  background:var(--surface);
   border:1px solid rgba(230,230,239,.9);
   transition: background .15s, border-color .15s, transform .15s;
 }
 .pv-row:hover{
-  background:#e6e6e6;
+  background:var(--hover);
   border-color: rgba(230,230,239,.9);
 }
 
@@ -212,7 +256,7 @@ select:focus, input:focus, textarea:focus{
   width: min(320px, 60vw);
   max-height: min(320px, 52vh);
   overflow: auto;
-  background:#fff;
+  background:var(--surface);
   border:1px solid var(--border);
   border-radius: 14px;
   box-shadow: var(--shadow);
@@ -232,7 +276,7 @@ select:focus, input:focus, textarea:focus{
 }
 .pt-item{
   border:1px solid rgba(230,230,239,.9);
-  background:#fafafa;
+  background:var(--surface2);
   border-radius: 10px;
   padding: 8px 10px;
   font-size: 13px;
@@ -244,17 +288,17 @@ select:focus, input:focus, textarea:focus{
   gap:10px;
 }
 .pt-item.active{
-  background:#eef2ff;
+  background:var(--dragBg);
   border-color: rgba(17,24,39,.18);
 }
 .pt-tag{
   flex:0 0 auto;
   font-size: 12px;
-  color:#111827;
+  color:var(--text);
   border:1px solid rgba(17,24,39,.18);
   padding: 2px 8px;
   border-radius: 999px;
-  background:#fff;
+  background:var(--surface);
 }
 .pt-empty{
   font-size: 13px;
@@ -293,11 +337,11 @@ select:focus, input:focus, textarea:focus{
   padding:6px 10px;
   border-radius:12px;
   border:1px solid var(--border);
-  background:#fff;
+  background:var(--surface);
   transition:.15s;
 }
 .toggle:hover{
-  background:#f3f4f6;
+  background:var(--surface3);
 }
 .toggle input{
   position:absolute;
@@ -310,7 +354,7 @@ select:focus, input:focus, textarea:focus{
   width:40px;
   height:22px;
   border-radius:999px;
-  background:#e5e7eb;
+  background:rgba(229,231,235,.9);
   border:1px solid rgba(17,24,39,.12);
   position:relative;
   transition:.15s;
@@ -320,7 +364,7 @@ select:focus, input:focus, textarea:focus{
   width:18px;
   height:18px;
   border-radius:999px;
-  background:#fff;
+  background:var(--surface);
   box-shadow: 0 2px 8px rgba(16,24,40,.12);
   position:absolute;
   top:50%;
@@ -334,8 +378,8 @@ select:focus, input:focus, textarea:focus{
 }
 /* 选中态 */
 .toggle input:checked + .toggle-track{
-  background:#111827;
-  border-color:#111827;
+  background:var(--primaryBg);
+  border-color:var(--primaryBg);
 }
 .toggle input:checked + .toggle-track .toggle-thumb{
   left:20px;
@@ -372,12 +416,12 @@ dialog::backdrop{ background:rgba(0,0,0,.35); }
   align-items:center;
   padding:12px 14px;
   border-bottom:1px solid var(--border);
-  background:#fff;
+  background:var(--surface);
 }
 .dlg-title{ font-weight:700; }
 .dlg-sub{ font-size:12px; color:var(--muted); margin-top:2px; }
 
-.dlg-body{ padding:14px; background:#fff; }
+.dlg-body{ padding:14px; background:var(--surface); }
 .opt-list{ display:flex; flex-direction:column; gap:10px; }
 
 .opt-row{
@@ -387,7 +431,7 @@ dialog::backdrop{ background:rgba(0,0,0,.35); }
   border:1px solid var(--border);
   border-radius:14px;
   padding:10px;
-  background:#fff;
+  background:var(--surface);
 }
 .opt-row input[type="text"]{
   flex:1;
@@ -408,7 +452,7 @@ dialog::backdrop{ background:rgba(0,0,0,.35); }
   border:1px solid var(--border);
   border-radius:14px;
   padding:10px;
-  background:#fafafa;
+  background:var(--surface2);
   display:flex;
   gap:8px;
 }
@@ -418,7 +462,7 @@ dialog::backdrop{ background:rgba(0,0,0,.35); }
   border-radius:12px;
   padding:10px;
   font-size:13px;
-  background:#fff;
+  background:var(--surface);
 }
 .dlg-tip{ margin-top:8px; font-size:12px; color:var(--muted); }
 
@@ -433,7 +477,7 @@ dialog::backdrop{ background:rgba(0,0,0,.35); }
   font-size:13px;
   line-height:1.6;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  background:#fafafa;
+  background:var(--surface2);
 }
 .md-actions{
   margin-top:10px;
@@ -447,8 +491,8 @@ dialog::backdrop{ background:rgba(0,0,0,.35); }
   bottom:14px;
   left:50%;
   transform:translateX(-50%);
-  background:#111827;
-  color:#fff;
+  background:var(--primaryBg);
+  color:var(--primaryText);
   padding:10px 12px;
   border-radius:999px;
   font-size:13px;
@@ -498,13 +542,13 @@ dialog::backdrop{ background:rgba(0,0,0,.35); }
   border:2px dashed rgba(17,24,39,.25);
   color:var(--muted);
   border-radius:14px;
-  background:#fafafa;
+  background:var(--surface2);
 }
 .root-drop.show{ display:block; }
 .root-drop.active{
   background: var(--dragBg);
-  border-color: rgba(17,24,39,.5);
-  color:#111827;
+  border-color: var(--border);
+  color:var(--text);
 }
 
 /* 数据导入/导出 dialog */
@@ -515,17 +559,17 @@ dialog::backdrop{ background:rgba(0,0,0,.35); }
 }
 .tab{
   border:1px solid var(--border);
-  background:#fff;
+  background:var(--surface);
   border-radius:999px;
   padding:8px 12px;
   font-size:13px;
   font-weight:700;
 }
-.tab:hover{ background:#f3f4f6; }
+.tab:hover{ background:var(--surface3); }
 .tab.active{
-  background:#111827;
-  color:#fff;
-  border-color:#111827;
+  background:var(--primaryBg);
+  color:var(--primaryText);
+  border-color:var(--primaryBg);
 }
 .panel.hidden{ display:none; }
 
@@ -539,7 +583,7 @@ dialog::backdrop{ background:rgba(0,0,0,.35); }
   font-size:13px;
   line-height:1.6;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  background:#fafafa;
+  background:var(--surface2);
 }
 
 .import-row{
@@ -556,7 +600,7 @@ dialog::backdrop{ background:rgba(0,0,0,.35); }
   border:1px solid var(--border);
   border-radius:12px;
   padding:8px 10px;
-  background:#fff;
+  background:var(--surface);
 }
 
 .msg{

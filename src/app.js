@@ -3,6 +3,7 @@ const STORAGE_KEY = "toc_ideator_split_v1";
 const PREVIEW_NUM_KEY = "toc_preview_numbers_v1";
 const DOC_TITLE_KEY = "toc_doc_title_v1";
 const PREVIEW_TIP_KEY = "toc_preview_tip_v1";
+const THEME_KEY = "toc_theme_v1"; // 'dark' | 'light'
 
 function uid(){
   if (crypto && crypto.randomUUID) return crypto.randomUUID();
@@ -242,6 +243,34 @@ let showPreviewTips = (() => {
   return v === "1";
 })();
 
+// ------------------ 主题（深色/浅色） ------------------
+function getInitialTheme(){
+  const saved = localStorage.getItem(THEME_KEY);
+  if (saved === "dark" || saved === "light") return saved;
+  // 未保存时：跟随系统
+  try{
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  }catch(_){
+    return "light";
+  }
+}
+
+function applyTheme(theme){
+  const isDark = theme === "dark";
+  document.body.classList.toggle("theme-dark", isDark);
+  localStorage.setItem(THEME_KEY, isDark ? "dark" : "light");
+
+  // 同步开关 UI（以及文案）
+  const chk = document.getElementById("chkTheme");
+  if (chk) chk.checked = isDark;
+  const txt = chk?.closest?.("label")?.querySelector?.(".toggle-text");
+  if (txt) txt.textContent = isDark ? "深色" : "浅色";
+}
+
+// 页面初始化时先应用一次主题
+applyTheme(getInitialTheme());
 
 function save(){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(tree));
@@ -279,6 +308,18 @@ let dragId = null;
 let dragLevel = null;
 let lastHoverRow = null;
 
+// 深色/浅色 开关
+const elChkTheme = document.getElementById("chkTheme");
+if (elChkTheme){
+  // 这里再同步一次 UI（防止 DOM 还没就绪时 applyTheme 没更新到控件）
+  elChkTheme.checked = localStorage.getItem(THEME_KEY) === "dark";
+  applyTheme(elChkTheme.checked ? "dark" : "light");
+
+  elChkTheme.onchange = () => {
+    applyTheme(elChkTheme.checked ? "dark" : "light");
+  };
+}
+
 const elChkNumbers = document.getElementById("chkNumbers");
 if (elChkNumbers){
   elChkNumbers.checked = showPreviewNumbers;
@@ -298,7 +339,6 @@ if (elChkTip){
     if (!showPreviewTips) hidePreviewTip(); // 关掉时立刻隐藏
   };
 }
-
 
 // ------------------ 渲染 ------------------
 function render(){
